@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 namespace ProducerConsumer
 {
     /// <summary>
-    /// Class designed to execute added actions in multiple threads
+    /// Class designed to execute added actions
     /// </summary>
     public class Consumer : IConsumer
     {
         /// <summary>
         /// Constructor method with default params (single internal thread and not execute unexecuted actions before stopping)
         /// </summary>
-        public Consumer() : this (1, false)
+        public Consumer() : this (1, true)
         { }
 
         /// <summary>
@@ -95,10 +95,7 @@ namespace ProducerConsumer
         private void InitWorkers()
         {
             _workers = Enumerable.Range(1, _workerCount)
-                .Select(i => 
-                {
-                    return Task.Run(() => WorkLoop(i, _workerCancellationTokenSource.Token), _workerCancellationTokenSource.Token);
-                })
+                .Select(i => { return Task.Run(() => WorkLoop(i, _workerCancellationTokenSource.Token), _workerCancellationTokenSource.Token); })
                 .ToArray();
         }
 
