@@ -15,7 +15,7 @@ namespace ProducerConsumer
             TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
 
             int consumerThreadCount = 1;
-            bool isInterruptImmidiately = false;
+            bool isInterruptImmidiately = true; // Not execute remaining actions when stopping
             int producerThreadCount = 3;
 
             Console.WriteLine("For interruption produce-consume process press Enter");
