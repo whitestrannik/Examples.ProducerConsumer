@@ -12,11 +12,13 @@ namespace ProducerConsumer.Test
         [TestMethod]
         public void AddAndWaitSingleWorkItemTest()
         {
-            int i = 0;
+            int i = 0; 
             using (IConsumer consumer = new Consumer())
             {
                 Task task = consumer.AddAction(() => { Interlocked.Increment(ref i); });
                 task.Wait();
+
+                i = Interlocked.CompareExchange(ref i, 0, 0);
                 Assert.IsTrue(i == 1);
                 Assert.IsTrue(task.IsCompleted);
             }
@@ -34,6 +36,7 @@ namespace ProducerConsumer.Test
 
                 Task.WaitAll(task1, task2, task3);
 
+                i = Interlocked.CompareExchange(ref i, 0, 0);
                 Assert.IsTrue(i == 3);
                 Assert.IsTrue(task1.IsCompleted);
                 Assert.IsTrue(task2.IsCompleted);
@@ -65,6 +68,7 @@ namespace ProducerConsumer.Test
                     Assert.IsNotNull(cancelExc);
                 }
 
+                i = Interlocked.CompareExchange(ref i, 0, 0);
                 Assert.IsTrue(i == 1);
                 Assert.IsTrue(task1.IsCompleted);
                 Assert.IsTrue(task2.IsCanceled);
@@ -97,6 +101,7 @@ namespace ProducerConsumer.Test
                         Assert.IsTrue(innEx is TaskCanceledException);
                 }
 
+                i = Interlocked.CompareExchange(ref i, 0, 0);
                 Assert.IsTrue(i == 2);
                 Assert.IsTrue(task1.IsCompleted);
                 Assert.IsTrue(task2.IsCanceled);
